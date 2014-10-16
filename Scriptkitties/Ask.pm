@@ -1,9 +1,9 @@
 #!/usr/bin/env perl
 
+package Scriptkitties::Ask;
+
 use strict;
 use warnings;
-
-package Scriptkitties::Ask;
 
 sub new
 {
