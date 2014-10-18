@@ -78,6 +78,14 @@ sub choice
 
 		chomp($answer = <STDIN>);
 
+		if (!length($answer) && !defined($default)) {
+			next;
+		}
+
+		if (!length($answer) && defined($default)) {
+			return $options[$default - 1];
+		}
+
 		if (!($answer =~ /\d+/)) {
 			print "'$answer' is an invalid choice. Please try again.\n";
 			next;
