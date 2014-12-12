@@ -70,7 +70,7 @@ sub choice
 			}
 		}
 
-		if (defined($default)) {
+		if (defined($default) && $default > 0) {
 			printf('Enter a number [%s]: ', $default);
 		} else {
 			print 'Enter a number: ';
@@ -87,7 +87,7 @@ sub choice
 		}
 
 		if (!($answer =~ /\d+/)) {
-			print "'$answer' is an invalid choice. Please try again.\n";
+			print "\"$answer\" is an invalid choice. Please try again.\n";
 			next;
 		}
 
