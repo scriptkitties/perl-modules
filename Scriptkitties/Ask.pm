@@ -83,7 +83,7 @@ sub choice
 		}
 
 		if (!length($answer) && defined($default)) {
-			return $options[$default - 1];
+			return $options[$default - 1][0];
 		}
 
 		if (!($answer =~ /\d+/)) {
