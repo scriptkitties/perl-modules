@@ -53,22 +53,70 @@ sub choice
 		$self,
 		$question,
 		$o,
-		$default
+		$default,
+		$columns
 	) = @_;
-	my @options = @$o;
+	my @options       = @$o;
 	my $answer;
-	my $max_opts = ($#options + 1);
+	my $columnc       = 0;
+	my $max_opts      = ($#options + 1);
+	my $length_index  = length("$max_opts");
+	my $length_option = 0;
+	my $printf_value;
 
+	# set the amount of columns
+	if (!defined($columns) || $columns == 0) {
+		$columns = 1;
+	} else {
+		for (my $i = 0; $i < $#options; $i++) {
+			# check wether a displayname is given and store it in a variable we're not using
+			# right now anyway
+			if (defined($options[$i][1])) {
+				$printf_value = $options[$i][1];
+			} else {
+				$printf_value = $options[$i][0];
+			}
+
+			# check if the length is bigger, since we want the biggest possible length
+			if (length($printf_value) > $length_option) {
+				$length_option = length($printf_value);
+			}
+		}
+
+		# add a bit of space between the options
+		$length_option += 2;
+
+		# calculate how much columns we could fit
+		$columns = int(80 / $length_option) - 1;
+
+		# at least 1 column would be nice to have
+		if ($columns < 1) {
+			$columns = 1
+		}
+	}
+
+	# print the quetion
 	print "$question:\n";
 
 	while (1) {
 		for (my $i = 0; $i < $max_opts; $i++) {
 			if (defined($options[$i][1])) {
-				printf(" %5d) %s\n", ($i + 1), $options[$i][1]);
+				$printf_value = $options[$i][1];
 			} else {
-				printf(" %5d) %s\n", ($i + 1), $options[$i][0]);
+				$printf_value = $options[$i][0];
+			}
+
+			# print the option
+			printf(" %${length_index}d) %-${length_option}s", ($i + 1), $options[$i][1]);
+
+			if (++$columnc == $columns) {
+				print "\n";
+				$columnc = 0;
 			}
 		}
+
+		# add an extra newline before the input
+		print "\n";
 
 		if (defined($default) && $default > 0) {
 			printf('Enter a number [%s]: ', $default);
